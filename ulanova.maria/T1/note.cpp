@@ -45,10 +45,6 @@ namespace ulanova
     {
       throw std::logic_error("note not found");
     }
-    if (from == to)
-    {
-      throw std::logic_error("error");
-    }
     auto& links = it_from -> second -> links;
     for(size_t i = 0; i < links.size(); ++i)
     {
@@ -95,7 +91,11 @@ namespace ulanova
     for (auto it = links.begin(); it != links.end(); ++it)
     {
       auto ptr = it->lock();
-      if (ptr != nullptr && ptr == it_to->second)
+      if (ptr == nullptr)
+      {
+        continue;
+      }
+      if (ptr == it_to->second)
       {
         links.erase(it);
         found = true;

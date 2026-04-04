@@ -59,7 +59,7 @@ void expired(std::istream& in, std::ostream& out, ulanova::DB& db)
 {
   std::string name;
   in >> name;
-  out << ulanova::expired(db, name);
+  out << ulanova::expired(db, name) << "\n";
 }
 void refresh(std::istream& in, std::ostream&, ulanova::DB& db)
 {
