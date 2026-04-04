@@ -5,6 +5,10 @@ namespace ulanova
 {
   void create_note(DB& db, const std::string& name)
   {
+    if (db.count(name))
+    {
+      throw std::logic_error("error");
+    }
     db[name] = std::make_shared<Note>(Note{name});
   }
   void add_line(DB& db, const std::string& name, const std::string& text)
@@ -27,6 +31,10 @@ namespace ulanova
   }
   void drop(DB& db, const std::string& name)
   {
+    if (db.find(name) == db.end())
+    {
+      throw std::logic_error("error");
+    }
     db.erase(name);
   }
   void link(DB& db, const std::string& from, const std::string& to)
@@ -37,7 +45,10 @@ namespace ulanova
     {
       throw std::logic_error("note not found");
     }
-
+    if (from == to)
+    {
+      throw std::logic_error("error");
+    }
     auto& links = it_from -> second -> links;
     for(size_t i = 0; i < links.size(); ++i)
     {
@@ -46,7 +57,7 @@ namespace ulanova
       {
         if (ptr == it_to -> second)
         {
-          return;
+          throw std::logic_error("error");
         }
       }
     }
