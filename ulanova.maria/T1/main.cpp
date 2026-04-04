@@ -26,6 +26,10 @@ void show(std::istream& in, std::ostream& out, ulanova::DB& db)
   {
     out << lines[i] << "\n";
   }
+  if (lines.empty())
+  {
+    out << "";
+  }
 }
 void drop(std::istream& in, std::ostream&, ulanova::DB& db)
 {
@@ -53,6 +57,10 @@ void mind(std::istream& in, std::ostream& out, ulanova::DB& db)
   for (size_t i = 0; i < res.size(); ++i)
   {
     out << res[i] << "\n";
+  }
+  if (res.empty())
+  {
+    out << "\n";
   }
 }
 void expired(std::istream& in, std::ostream& out, ulanova::DB& db)
