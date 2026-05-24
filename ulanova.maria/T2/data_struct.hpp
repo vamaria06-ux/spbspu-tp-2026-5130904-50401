@@ -38,6 +38,16 @@ namespace ulanova
     std::string& value;
   };
 
+   struct DataStructInput
+  {
+    DataStruct& data;
+    bool& hasKey1;
+    bool& hasKey2;
+    bool& hasKey3;
+  };
+
+  std::istream& operator>>(std::istream& in, DataStructInput&& data);
+
   std::istream& operator>>(std::istream& in, DelimiterIO&& data);
   std::istream& operator>>(std::istream& in, LabelIO&& data);
   std::istream& operator>>(std::istream& in, UllLiteralIO&& data);

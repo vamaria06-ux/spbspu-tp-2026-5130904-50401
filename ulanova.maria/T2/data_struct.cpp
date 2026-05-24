@@ -151,17 +151,24 @@ std::istream& ulanova::operator>>(std::istream& in, DataStruct& data)
   }
 
   DataStruct input{0.0, 0, ""};
+  bool hasKey1 = false;
+  bool hasKey2 = false;
+  bool hasKey3 = false;
 
   using del_t = DelimiterIO;
   in >> del_t{'('};
-  in >> del_t{':'} >> LabelIO{"key1"} >> DblScientificIO{input.key1};
-  in >> del_t{':'} >> LabelIO{"key2"} >> UllLiteralIO{input.key2};
-  in >> del_t{':'} >> LabelIO{"key3"} >> StringIO{input.key3};
+  in >> del_t{':'} >> DataStructInput{input, hasKey1, hasKey2, hasKey3};
+  in >> del_t{':'} >> DataStructInput{input, hasKey1, hasKey2, hasKey3};
+  in >> del_t{':'} >> DataStructInput{input, hasKey1, hasKey2, hasKey3};
   in >> del_t{':'} >> del_t{')'};
 
-  if (in)
+  if (in && hasKey1 && hasKey2 && hasKey3)
   {
     data = input;
+  }
+  else
+  {
+    in.setstate(std::ios_base::failbit);
   }
 
   return in;
@@ -176,4 +183,41 @@ std::ostream& ulanova::operator<<(std::ostream& out, const DataStruct& data)
   out << ":)";
 
   return out;
+}
+
+std::istream& ulanova::operator>>(std::istream& in, DataStructInput&& data)
+{
+  if (!in)
+  {
+    return in;
+  }
+
+  std::string key;
+  in >> key;
+  if (!in)
+  {
+    return in;
+  }
+
+  if (key == "key1")
+  {
+    in >> DblScientificIO{data.data.key1};
+    data.hasKey1 = static_cast< bool >(in);
+  }
+  else if (key == "key2")
+  {
+    in >> UllLiteralIO{data.data.key2};
+    data.hasKey2 = static_cast< bool >(in);
+  }
+  else if (key == "key3")
+  {
+    in >> StringIO{data.data.key3};
+    data.hasKey3 = static_cast< bool >(in);
+  }
+  else
+  {
+    in.setstate(std::ios_base::failbit);
+  }
+
+  return in;
 }
