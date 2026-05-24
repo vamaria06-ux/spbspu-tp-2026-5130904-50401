@@ -4,6 +4,7 @@
 #include <istream>
 #include <cstdlib>
 #include <iomanip>
+#include <sstream>
 
 
 bool ulanova::operator<(const DataStruct& lhs, const DataStruct& rhs)
@@ -143,34 +144,50 @@ std::istream& ulanova::operator>>(std::istream& in, StringIO&& data)
   return in;
 }
 
+namespace
+{
+  bool parseDataStruct(std::istream& in, ulanova::DataStruct& data)
+  {
+    ulanova::DataStruct input{0.0, 0, ""};
+    bool hasKey1 = false;
+    bool hasKey2 = false;
+    bool hasKey3 = false;
+
+    using del_t = ulanova::DelimiterIO;
+    using input_t = ulanova::DataStructInput;
+
+    in >> del_t{'('};
+    in >> del_t{':'} >> input_t{input, hasKey1, hasKey2, hasKey3};
+    in >> del_t{':'} >> input_t{input, hasKey1, hasKey2, hasKey3};
+    in >> del_t{':'} >> input_t{input, hasKey1, hasKey2, hasKey3};
+    in >> del_t{':'} >> del_t{')'};
+
+    if (in && hasKey1 && hasKey2 && hasKey3)
+    {
+      data = input;
+      return true;
+    }
+
+    return false;
+  }
+}
+
 std::istream& ulanova::operator>>(std::istream& in, DataStruct& data)
 {
-  if (!in)
+  std::string line;
+  while (std::getline(in, line))
   {
-    return in;
+    std::istringstream input(line);
+    DataStruct parsed{0.0, 0, ""};
+
+    if (parseDataStruct(input, parsed))
+    {
+      data = parsed;
+      return in;
+    }
   }
 
-  DataStruct input{0.0, 0, ""};
-  bool hasKey1 = false;
-  bool hasKey2 = false;
-  bool hasKey3 = false;
-
-  using del_t = DelimiterIO;
-  in >> del_t{'('};
-  in >> del_t{':'} >> DataStructInput{input, hasKey1, hasKey2, hasKey3};
-  in >> del_t{':'} >> DataStructInput{input, hasKey1, hasKey2, hasKey3};
-  in >> del_t{':'} >> DataStructInput{input, hasKey1, hasKey2, hasKey3};
-  in >> del_t{':'} >> del_t{')'};
-
-  if (in && hasKey1 && hasKey2 && hasKey3)
-  {
-    data = input;
-  }
-  else
-  {
-    in.setstate(std::ios_base::failbit);
-  }
-
+  in.setstate(std::ios_base::failbit);
   return in;
 }
 
