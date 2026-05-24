@@ -139,6 +139,28 @@ std::istream& ulanova::operator>>(std::istream& in, DblScientificIO&& data)
   return in;
 }
 
+std::ostream& ulanova::operator<<(std::ostream& out, const DblScientificOutput& data)
+{
+  IOGuard guard(out);
+
+  std::ostringstream stream;
+  stream << std::scientific << std::setprecision(1) << data.value;
+
+  std::string value = stream.str();
+  const std::size_t exp = value.find('e');
+  if ((exp != std::string::npos) && (exp + 3 < value.size()))
+  {
+    std::size_t index = exp + 2;
+    while ((index + 1 < value.size()) && (value[index] == '0'))
+    {
+      value.erase(index, 1);
+    }
+  }
+
+  out << value;
+  return out;
+}
+
 std::istream& ulanova::operator>>(std::istream& in, StringIO&& data)
 {
   if (!in)

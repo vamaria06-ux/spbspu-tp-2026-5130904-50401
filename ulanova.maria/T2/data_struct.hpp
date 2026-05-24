@@ -69,6 +69,13 @@ namespace ulanova
   std::istream& operator>>(std::istream& in, DblScientificIO&& data);
   std::istream& operator>>(std::istream& in, StringIO&& data);
 
+  struct DblScientificOutput
+  {
+    const double& value;
+  };
+
+  std::ostream& operator<<(std::ostream& out, const DblScientificOutput& data);
+
   std::istream& operator>>(std::istream& in, DataStruct& data);
   std::ostream& operator<<(std::ostream& out, const DataStruct& data);
 
