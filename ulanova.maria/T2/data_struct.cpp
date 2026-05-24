@@ -176,6 +176,8 @@ std::istream& ulanova::operator>>(std::istream& in, DataStruct& data)
 
 std::ostream& ulanova::operator<<(std::ostream& out, const DataStruct& data)
 {
+  IOGuard guard(out);
+
   out << "(:key1 ";
   out << std::scientific << std::setprecision(1) << data.key1;
   out << ":key2 " << data.key2 << "ull";
@@ -235,4 +237,20 @@ std::istream& ulanova::operator>>(std::istream& in, DataStructInput&& data)
   }
 
   return in;
+}
+
+ulanova::IOGuard::IOGuard(std::basic_ios< char >& stream):
+  stream_(stream),
+  precision_(stream.precision()),
+  width_(stream.width()),
+  flags_(stream.flags()),
+  fill_(stream.fill())
+{}
+
+ulanova::IOGuard::~IOGuard()
+{
+  stream_.precision(precision_);
+  stream_.width(width_);
+  stream_.flags(flags_);
+  stream_.fill(fill_);
 }

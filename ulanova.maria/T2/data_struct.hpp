@@ -3,6 +3,7 @@
 
 #include <iosfwd>
 #include <string>
+#include <ios>
 
 namespace ulanova
 {
@@ -44,6 +45,20 @@ namespace ulanova
     bool& hasKey1;
     bool& hasKey2;
     bool& hasKey3;
+  };
+
+  class IOGuard
+  {
+  public:
+    explicit IOGuard(std::basic_ios< char >& stream);
+    ~IOGuard();
+
+  private:
+    std::basic_ios< char >& stream_;
+    std::streamsize precision_;
+    std::streamsize width_;
+    std::basic_ios< char >::fmtflags flags_;
+    char fill_;
   };
 
   std::istream& operator>>(std::istream& in, DataStructInput&& data);
