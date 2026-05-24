@@ -201,16 +201,31 @@ std::istream& ulanova::operator>>(std::istream& in, DataStructInput&& data)
 
   if (key == "key1")
   {
+    if (data.hasKey1)
+    {
+      in.setstate(std::ios_base::failbit);
+      return in;
+    }
     in >> DblScientificIO{data.data.key1};
     data.hasKey1 = static_cast< bool >(in);
   }
   else if (key == "key2")
   {
+    if (data.hasKey2)
+    {
+      in.setstate(std::ios_base::failbit);
+      return in;
+    }
     in >> UllLiteralIO{data.data.key2};
     data.hasKey2 = static_cast< bool >(in);
   }
   else if (key == "key3")
   {
+    if (data.hasKey3)
+    {
+      in.setstate(std::ios_base::failbit);
+      return in;
+    }
     in >> StringIO{data.data.key3};
     data.hasKey3 = static_cast< bool >(in);
   }
