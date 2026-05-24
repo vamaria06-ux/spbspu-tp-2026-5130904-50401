@@ -229,7 +229,7 @@ std::ostream& ulanova::operator<<(std::ostream& out, const DataStruct& data)
   IOGuard guard(out);
 
   out << "(:key1 ";
-  out << std::scientific << std::setprecision(1) << data.key1;
+  out << DblScientificOutput{data.key1};
   out << ":key2 " << data.key2 << "ull";
   out << ":key3 " << std::quoted(data.key3);
   out << ":)";
