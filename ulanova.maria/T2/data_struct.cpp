@@ -91,12 +91,23 @@ std::istream& ulanova::operator>>(std::istream& in, DblScientificIO&& data)
   }
 
   std::string value;
-  in >> value;
-  if (!in)
+  char current = 0;
+
+  while (in.get(current))
   {
-    return in;
+    if (current == ':')
+    {
+      in.putback(current);
+      break;
+    }
+    value += current;
   }
 
+  if (value.empty())
+  {
+    in.setstate(std::ios_base::failbit);
+    return in;
+  }
   const size_t dot = value.find('.');
   const size_t exp = value.find('e');
 
