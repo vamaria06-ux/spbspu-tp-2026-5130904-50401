@@ -126,3 +126,54 @@ std::istream& ulanova::operator>>(std::istream& in, DblScientificIO&& data)
   data.value = result;
   return in;
 }
+
+std::istream& ulanova::operator>>(std::istream& in, StringIO&& data)
+{
+  if (!in)
+  {
+    return in;
+  }
+
+  std::string value;
+  in >> std::quoted(value);
+  if (in)
+  {
+    data.value = value;
+  }
+  return in;
+}
+
+std::istream& ulanova::operator>>(std::istream& in, DataStruct& data)
+{
+  if (!in)
+  {
+    return in;
+  }
+
+  DataStruct input{0.0, 0, ""};
+
+  using del_t = DelimiterIO;
+  in >> del_t{'('};
+  in >> del_t{':'} >> LabelIO{"key1"} >> DblScientificIO{input.key1};
+  in >> del_t{':'} >> LabelIO{"key2"} >> UllLiteralIO{input.key2};
+  in >> del_t{':'} >> LabelIO{"key3"} >> StringIO{input.key3};
+  in >> del_t{':'} >> del_t{')'};
+
+  if (in)
+  {
+    data = input;
+  }
+
+  return in;
+}
+
+std::ostream& ulanova::operator<<(std::ostream& out, const DataStruct& data)
+{
+  out << "(:key1 ";
+  out << std::scientific << std::setprecision(1) << data.key1;
+  out << ":key2 " << data.key2 << "ull";
+  out << ":key3 " << std::quoted(data.key3);
+  out << ":)";
+
+  return out;
+}
