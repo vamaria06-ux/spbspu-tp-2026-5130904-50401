@@ -2,6 +2,8 @@
 
 #include <string>
 #include <istream>
+#include <cstdlib>
+#include <iomanip>
 
 
 bool ulanova::operator<(const DataStruct& lhs, const DataStruct& rhs)
@@ -77,5 +79,50 @@ std::istream& ulanova::operator>>(std::istream& in, UllLiteralIO&& data)
   }
 
   data.value = value;
+  return in;
+}
+
+std::istream& ulanova::operator>>(std::istream& in, DblScientificIO&& data)
+{
+  if (!in)
+  {
+    return in;
+  }
+
+  std::string value;
+  in >> value;
+  if (!in)
+  {
+    return in;
+  }
+
+  const size_t dot = value.find('.');
+  const size_t exp = value.find('e');
+
+  if ((dot == std::string::npos) || (exp == std::string::npos))
+  {
+    in.setstate(std::ios_base::failbit);
+    return in;
+  }
+  if ((dot == 0) || ( dot + 1 >= exp))
+  {
+    in.setstate(std::ios_base::failbit);
+    return in;
+  }
+  if ((exp + 2 > value.size()) || ((value[exp + 1] != '+') && (value[exp + 1] != '-')))
+  {
+    in.setstate(std::ios_base::failbit);
+    return in;
+  }
+
+  char* end = nullptr;
+  const double result = std::strtod(value.c_str(), &end);
+  if ((end == value.c_str()) || (*end != '\0'))
+  {
+    in.setstate(std::ios_base::failbit);
+    return in;
+  }
+
+  data.value = result;
   return in;
 }
