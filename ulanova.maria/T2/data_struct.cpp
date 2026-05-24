@@ -46,3 +46,36 @@ std::istream& ulanova::operator>>(std::istream& in, LabelIO&& data)
   }
   return in;
 }
+
+std::istream& ulanova::operator>>(std::istream& in, UllLiteralIO&& data)
+{
+  if (!in)
+  {
+    return in;
+  }
+  unsigned long long value = 0;
+  in >> value;
+
+  char first = 0;
+  char second = 0;
+  char third = 0;
+  in >> first >> second >> third;
+
+  if(!in)
+  {
+    return in;
+  }
+
+  first = static_cast< char >(std::tolower(first));
+  second = static_cast< char >(std::tolower(second));
+  third = static_cast< char >(std::tolower(third));
+
+  if ((first != 'u') || (second != 'l') || (third != 'l'))
+  {
+    in.setstate(std::ios_base::failbit);
+    return in;
+  }
+
+  data.value = value;
+  return in;
+}
