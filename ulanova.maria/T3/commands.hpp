@@ -12,6 +12,7 @@ namespace ulanova
   using command_t = void (*)(std::istream &, std::ostream &, const polygons_t &);
 
   void doCount(std::istream & in, std::ostream & out, const polygons_t & polygons);
+  void doArea(std::istream & in, std::ostream & out, const polygons_t & polygons);
 }
 
 #endif
