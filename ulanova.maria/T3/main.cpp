@@ -37,6 +37,8 @@ int main(int argc, char ** argv)
   std::map< std::string, ulanova::command_t > commands;
   commands["COUNT"] = ulanova::doCount;
   commands["AREA"] = ulanova::doArea;
+  commands["MAX"] = ulanova::doMax;
+  commands["MIN"] = ulanova::doMin;
 
   std::string command;
   while (std::cin >> command)

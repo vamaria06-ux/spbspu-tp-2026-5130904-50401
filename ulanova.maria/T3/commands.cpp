@@ -16,6 +16,19 @@ namespace
   {
     return std::accumulate(areas.begin(), areas.end(), 0.0);
   }
+
+  std::vector< double > getAreas(const std::vector< ulanova::Polygon > & polygons)
+  {
+    std::vector< double > areas(polygons.size());
+    std::transform(polygons.begin(), polygons.end(), areas.begin(), ulanova::getArea);
+
+    return areas;
+  }
+
+  bool compareVertexCount(const ulanova::Polygon & lhs, const ulanova::Polygon & rhs)
+  {
+    return lhs.points.size() < rhs.points.size();
+  }
 }
 
 void ulanova::doCount(std::istream & in, std::ostream & out, const polygons_t & polygons)
@@ -115,4 +128,70 @@ void ulanova::doArea(std::istream & in, std::ostream & out, const polygons_t & p
   }
 
   out << std::fixed << std::setprecision(1) << result << '\n';
+}
+
+void ulanova::doMax(std::istream & in, std::ostream & out, const polygons_t & polygons)
+{
+  if (polygons.empty())
+  {
+    throw std::logic_error("empty polygon list");
+  }
+
+  std::string parameter;
+  in >> parameter;
+
+  if (parameter == "AREA")
+  {
+    const std::vector< double > areas = getAreas(polygons);
+    const auto maxArea = std::max_element(areas.begin(), areas.end());
+
+    out << std::fixed << std::setprecision(1) << *maxArea << '\n';
+  }
+  else if (parameter == "VERTEXES")
+  {
+    const auto maxPolygon = std::max_element(
+      polygons.begin(),
+      polygons.end(),
+      compareVertexCount
+    );
+
+    out << maxPolygon->points.size() << '\n';
+  }
+  else
+  {
+    throw std::logic_error("invalid MAX parameter");
+  }
+}
+
+void ulanova::doMin(std::istream & in, std::ostream & out, const polygons_t & polygons)
+{
+  if (polygons.empty())
+  {
+    throw std::logic_error("empty polygon list");
+  }
+
+  std::string parameter;
+  in >> parameter;
+
+  if (parameter == "AREA")
+  {
+    const std::vector< double > areas = getAreas(polygons);
+    const auto minArea = std::min_element(areas.begin(), areas.end());
+
+    out << std::fixed << std::setprecision(1) << *minArea << '\n';
+  }
+  else if (parameter == "VERTEXES")
+  {
+    const auto minPolygon = std::min_element(
+      polygons.begin(),
+      polygons.end(),
+      compareVertexCount
+    );
+
+    out << minPolygon->points.size() << '\n';
+  }
+  else
+  {
+    throw std::logic_error("invalid MIN parameter");
+  }
 }

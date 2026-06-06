@@ -13,6 +13,8 @@ namespace ulanova
 
   void doCount(std::istream & in, std::ostream & out, const polygons_t & polygons);
   void doArea(std::istream & in, std::ostream & out, const polygons_t & polygons);
+  void doMax(std::istream & in, std::ostream & out, const polygons_t & polygons);
+  void doMin(std::istream & in, std::ostream & out, const polygons_t & polygons);
 }
 
 #endif
