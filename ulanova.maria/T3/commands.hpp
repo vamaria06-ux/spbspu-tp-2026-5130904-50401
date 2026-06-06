@@ -16,6 +16,7 @@ namespace ulanova
   void doMax(std::istream & in, std::ostream & out, const polygons_t & polygons);
   void doMin(std::istream & in, std::ostream & out, const polygons_t & polygons);
   void doPerms(std::istream & in, std::ostream & out, const polygons_t & polygons);
+  void doMaxSeq(std::istream & in, std::ostream & out, const polygons_t & polygons);
 }
 
 #endif

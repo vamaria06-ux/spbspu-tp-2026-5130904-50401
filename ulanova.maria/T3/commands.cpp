@@ -43,6 +43,32 @@ namespace
       rhs.points.begin()
     );
   }
+  bool isSamePolygon(const ulanova::Polygon & lhs, const ulanova::Polygon & rhs)
+  {
+    return lhs == rhs;
+  }
+  size_t getMaxSequenceLength(const std::vector< ulanova::Polygon > & polygons,
+  const ulanova::Polygon & target)
+  {
+    using namespace std::placeholders;
+    const auto isTarget = std::bind(isSamePolygon, _1, std::cref(target));
+
+    size_t maxLength = 0;
+    auto first = polygons.begin();
+
+    while (first != polygons.end())
+    {
+      first = std::find_if(first, polygons.end(), isTarget);
+      const auto last = std::find_if_not(first, polygons.end(), isTarget);
+
+      const size_t currentLength = std::distance(first, last);
+      maxLength = std::max(maxLength, currentLength);
+
+      first = last;
+    }
+
+    return maxLength;
+  }
 }
 
 void ulanova::doCount(std::istream & in, std::ostream & out, const polygons_t & polygons)
@@ -224,4 +250,17 @@ void ulanova::doPerms(std::istream & in, std::ostream & out, const polygons_t & 
   const auto isPerm = std::bind(isPermutation, _1, std::cref(target));
 
   out << std::count_if(polygons.begin(), polygons.end(), isPerm) << '\n';
+}
+
+void ulanova::doMaxSeq(std::istream & in, std::ostream & out, const polygons_t & polygons)
+{
+  Polygon target{{}};
+  in >> target;
+
+  if (!in)
+  {
+    throw std::logic_error("invalid polygon");
+  }
+
+  out << getMaxSequenceLength(polygons, target) << '\n';
 }

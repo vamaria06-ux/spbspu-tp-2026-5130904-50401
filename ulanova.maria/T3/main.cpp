@@ -40,6 +40,7 @@ int main(int argc, char ** argv)
   commands["MAX"] = ulanova::doMax;
   commands["MIN"] = ulanova::doMin;
   commands["PERMS"] = ulanova::doPerms;
+  commands["MAXSEQ"] = ulanova::doMaxSeq;
 
   std::string command;
   while (std::cin >> command)
