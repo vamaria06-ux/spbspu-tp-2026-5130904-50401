@@ -29,6 +29,20 @@ namespace
   {
     return lhs.points.size() < rhs.points.size();
   }
+
+  bool isPermutation(const ulanova::Polygon & lhs, const ulanova::Polygon & rhs)
+  {
+    if (lhs.points.size() != rhs.points.size())
+    {
+      return false;
+    }
+
+    return std::is_permutation(
+      lhs.points.begin(),
+      lhs.points.end(),
+      rhs.points.begin()
+    );
+  }
 }
 
 void ulanova::doCount(std::istream & in, std::ostream & out, const polygons_t & polygons)
@@ -194,4 +208,20 @@ void ulanova::doMin(std::istream & in, std::ostream & out, const polygons_t & po
   {
     throw std::logic_error("invalid MIN parameter");
   }
+}
+
+void ulanova::doPerms(std::istream & in, std::ostream & out, const polygons_t & polygons)
+{
+  Polygon target{{}};
+  in >> target;
+
+  if (!in)
+  {
+    throw std::logic_error("invalid polygon");
+  }
+
+  using namespace std::placeholders;
+  const auto isPerm = std::bind(isPermutation, _1, std::cref(target));
+
+  out << std::count_if(polygons.begin(), polygons.end(), isPerm) << '\n';
 }
