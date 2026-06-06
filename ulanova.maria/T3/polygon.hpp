@@ -1,6 +1,7 @@
 #ifndef POLYGON_HPP
 #define POLYGON_HPP
 
+#include <cstddef>
 #include <iosfwd>
 #include <vector>
 
@@ -32,6 +33,10 @@ namespace ulanova
   void readPolygons(std::istream & in, std::vector< Polygon > & dest);
 
   double getArea(const Polygon & polygon);
+
+  bool hasEvenVertexCount(const Polygon & polygon);
+  bool hasOddVertexCount(const Polygon & polygon);
+  bool hasVertexCount(size_t count, const Polygon & polygon);
 
 }
 

@@ -176,3 +176,18 @@ double ulanova::getArea(const Polygon & polygon)
 
   return std::abs(static_cast< double >(doubleArea)) / 2.0;
 }
+
+bool ulanova::hasEvenVertexCount(const Polygon & polygon)
+{
+  return (polygon.points.size() % 2) == 0;
+}
+
+bool ulanova::hasOddVertexCount(const Polygon & polygon)
+{
+  return (polygon.points.size() % 2 ) != 0;
+}
+
+bool ulanova::hasVertexCount(size_t count, const Polygon & polygon)
+{
+  return polygon.points.size() == count;
+}
