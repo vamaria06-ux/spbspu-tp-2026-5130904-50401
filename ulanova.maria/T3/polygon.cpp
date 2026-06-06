@@ -1,6 +1,7 @@
 #include "polygon.hpp"
 
 #include <algorithm>
+#include <limits>
 #include <iterator>
 #include <istream>
 #include <ostream>
@@ -116,4 +117,23 @@ std::ostream & ulanova::operator<<(std::ostream & out, const Polygon & dest)
   }
 
   return out;
+}
+
+void ulanova::readPolygons(std::istream & in, std::vector< Polygon > & dest)
+{
+  while(!in.eof())
+  {
+    Polygon polygon{{}};
+    in >> polygon;
+
+    if (in)
+    {
+      dest.push_back(polygon);
+    }
+    else
+    {
+      in.clear();
+      in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+  }
 }

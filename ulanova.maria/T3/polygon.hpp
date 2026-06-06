@@ -29,6 +29,8 @@ namespace ulanova
   std::istream & operator>>(std::istream & in, Polygon & dest);
   std::ostream & operator<<(std::ostream & out, const Polygon & dest);
 
+  void readPolygons(std::istream & in, std::vector< Polygon > & dest);
+
 }
 
 #endif

@@ -18,5 +18,8 @@ int main(int argc, char ** argv)
     return 1;
   }
 
+  std::vector < ulanova::Polygon > polygons;
+  ulanova::readPolygons(input, polygons);
+
   return 0;
 }
