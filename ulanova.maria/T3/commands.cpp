@@ -69,6 +69,19 @@ namespace
 
     return maxLength;
   }
+
+  bool isLineEnd(std::istream & in)
+  {
+    int symbol = in.peek();
+
+    while ((symbol == ' ') || (symbol == '\t') || (symbol == '\r'))
+    {
+      in.get();
+      symbol = in.peek();
+    }
+
+    return (symbol == '\n') || (symbol == EOF);
+  }
 }
 
 void ulanova::doCount(std::istream & in, std::ostream & out, const polygons_t & polygons)
@@ -241,7 +254,7 @@ void ulanova::doPerms(std::istream & in, std::ostream & out, const polygons_t & 
   Polygon target{{}};
   in >> target;
 
-  if (!in)
+  if ((!in) || (!isLineEnd(in)))
   {
     throw std::logic_error("invalid polygon");
   }
@@ -257,7 +270,7 @@ void ulanova::doMaxSeq(std::istream & in, std::ostream & out, const polygons_t &
   Polygon target{{}};
   in >> target;
 
-  if (!in)
+  if ((!in) || (!isLineEnd(in)))
   {
     throw std::logic_error("invalid polygon");
   }
