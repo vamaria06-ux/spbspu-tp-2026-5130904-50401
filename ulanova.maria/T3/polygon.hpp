@@ -31,6 +31,8 @@ namespace ulanova
 
   void readPolygons(std::istream & in, std::vector< Polygon > & dest);
 
+  double getArea(const Polygon & polygon);
+
 }
 
 #endif

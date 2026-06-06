@@ -1,5 +1,8 @@
 #include "polygon.hpp"
 
+#include <cmath>
+#include <functional>
+#include <numeric>
 #include <algorithm>
 #include <limits>
 #include <iterator>
@@ -8,6 +11,17 @@
 
 #include "input.hpp"
 
+namespace
+{
+  long long getDoubleAreaTerm(const ulanova::Polygon & polygon, size_t index)
+  {
+    const size_t vertexCount = polygon.points.size();
+    const ulanova::Point & current = polygon.points[index];
+    const ulanova::Point & next = polygon.points[(index + 1) % vertexCount];
+
+    return (current.x * next.y) - (current.y * next.x);
+  }
+}
 
 bool ulanova::operator==(const Point & lhs, const Point & rhs)
 {
@@ -136,4 +150,29 @@ void ulanova::readPolygons(std::istream & in, std::vector< Polygon > & dest)
       in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
+}
+
+double ulanova::getArea(const Polygon & polygon)
+{
+  if (polygon.points.size() < 3)
+  {
+    return 0.0;
+  }
+
+  const size_t vertexCount = polygon.points.size();
+
+  std::vector< size_t > indexes (vertexCount);
+  std::iota(indexes.begin(), indexes.end(), 0);
+
+  std::vector< long long > terms(vertexCount);
+  std::transform(
+    indexes.begin(),
+    indexes.end(),
+    terms.begin(),
+    std::bind(getDoubleAreaTerm, std::cref(polygon), std::placeholders::_1)
+  );
+
+  const long long doubleArea = std::accumulate(terms.begin(), terms.end(), 0ll);
+
+  return std::abs(static_cast< double >(doubleArea)) / 2.0;
 }
