@@ -1,6 +1,7 @@
 #ifndef POLYGON_HPP
 #define POLYGON_HPP
 
+#include <iosfwd>
 #include <vector>
 
 namespace ulanova
@@ -21,6 +22,9 @@ namespace ulanova
 
   bool operator==(const Polygon & lhs, const Polygon & rhs);
   bool operator!=(const Polygon & lhs, const Polygon & rhs);
+
+  std::istream & operator>>(std::istream & in, Point & dest);
+  std::ostream & operator<<(std::ostream & out, const Point & dest);
 
 }
 
